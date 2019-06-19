@@ -1,6 +1,6 @@
 ---
 galaxy_info:
-  rolename: fdb
+  role_name: fdb
   author: Andrew Rothstein
   description: installs FoundationDB
   company: BlackRock Financial Management

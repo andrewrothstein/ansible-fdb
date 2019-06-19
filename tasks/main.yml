@@ -1,0 +1,67 @@
+---
+- name: resolve platform specific vars
+  include_vars: '{{ item }}'
+  with_first_found:
+    - files:
+        - '{{ ansible_distribution }}-{{ ansible_distribution_release }}.yml'
+        - '{{ ansible_distribution }}.yml'
+        - '{{ ansible_os_family }}.yml'
+      skip: true
+      paths:
+        - '{{ role_path }}/vars'
+- name: look for install...
+  become: yes
+  stat:
+    path: '{{ fdb_install_dir }}'
+  changed_when: False
+  register: fdb_bin_dir
+- when: not fdb_bin_dir.stat.exists
+  block:
+    - name: download...
+      become: yes
+      become_user: root
+      get_url:
+        url: '{{ fdb_tgz_url }}'
+        dest: /tmp/{{ fdb_tgz }}
+        checksum: '{{ fdb_checksum }}'
+        mode: 0644
+    - name: mkdir
+      become: yes
+      become_user: root
+      file:
+        path: '{{ fdb_install_dir }}'
+        state: directory
+        mode: 0755
+    - name: unarchive
+      become: yes
+      become_user: root
+      unarchive:
+        src: /tmp/{{ fdb_tgz }}
+        dest: '{{ fdb_install_dir }}'
+        mode: 0755
+        creates: '{{ fdb_install_dir }}/fdb_binaries'
+  always:
+    - name: cleanup
+      become: yes
+      become_user: root
+      file:
+        path: /tmp/{{ fdb_tgz }}
+        state: absent
+- name: link
+  become: yes
+  become_user: root
+  file:
+    src: '{{ fdb_install_dir }}'
+    dest: '{{ fdb_link_dir }}'
+    state: link
+- name: add to login shell path
+  become: yes
+  become_user: root
+  with_items:
+    - d: /etc/profile.d
+      f: fdb.sh
+  template:
+    src: '{{ item.f }}.j2'
+    dest: '{{ item.d }}/{{ item.f }}'
+    mode: '{{ item.m | default("0644") }}'
+    

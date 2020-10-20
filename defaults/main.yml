@@ -1,6 +1,6 @@
 ---
 # defaults file for fdb
-fdb_ver: '6.2.10'
+fdb_ver: 6.2.27
 fdb_mirror: https://www.foundationdb.org/downloads
 fdb_parent_install_dir: /usr/local
 
@@ -9,3 +9,5 @@ fdb_checksums:
   '6.1.12': sha256:492878874662da2e5083d583dadf83f9c22482d7877c5e280082e6553c7b5960
   # https://www.foundationdb.org/downloads/6.2.10/linux/fdb_6.2.10.tar.gz.sha256
   '6.2.10': sha256:2dbe4be59fa3f81757abd1b8d82beb406c7ee632a3d4cad773442678d93ff933
+  # https://www.foundationdb.org/downloads/6.2.27/linux/fdb_6.2.27.tar.gz.sha256
+  '6.2.27': sha256:642a4742147ee26b4125a4c366c9a3dedc0ad76b839b1c442834e10b33afb794

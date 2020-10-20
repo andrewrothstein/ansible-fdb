@@ -1,5 +1,5 @@
 #!/usr/bin/env sh
-VER=6.2.10
+VER=6.2.27
 URL=https://www.foundationdb.org/downloads/${VER}/linux/fdb_${VER}.tar.gz.sha256
 
 printf "  # %s\n" $URL

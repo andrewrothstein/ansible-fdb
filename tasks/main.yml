@@ -9,7 +9,7 @@
       skip: true
       paths:
         - '{{ role_path }}/vars'
-- name: look for install...
+- name: looking for install in {{ fdb_install_dir }}
   become: yes
   stat:
     path: '{{ fdb_install_dir }}'
@@ -17,35 +17,35 @@
   register: fdb_bin_dir
 - when: not fdb_bin_dir.stat.exists
   block:
-    - name: download...
+    - name: downloading {{ fdb_tgz_url }}
       become: yes
       become_user: root
       get_url:
         url: '{{ fdb_tgz_url }}'
-        dest: /tmp/{{ fdb_tgz }}
+        dest: '{{ fdb_tmp_tgz }}'
         checksum: '{{ fdb_checksum }}'
         mode: 0644
-    - name: mkdir
+    - name: mkdir {{ fdb_install_dir }}
       become: yes
       become_user: root
       file:
         path: '{{ fdb_install_dir }}'
         state: directory
         mode: 0755
-    - name: unarchive
+    - name: unarchiving {{ fdb_tmp_tgz }} into {{ fdb_install_dir }}
       become: yes
       become_user: root
       unarchive:
-        src: /tmp/{{ fdb_tgz }}
+        src: '{{ fdb_tmp_tgz }}'
         dest: '{{ fdb_install_dir }}'
         mode: 0755
         creates: '{{ fdb_install_dir }}/fdb_binaries'
   always:
-    - name: cleanup
+    - name: rm {{ fdb_tmp_tgz }}
       become: yes
       become_user: root
       file:
-        path: /tmp/{{ fdb_tgz }}
+        path: '{{ fdb_tmp_tgz }}'
         state: absent
 - name: link
   become: yes

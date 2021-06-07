@@ -2,6 +2,7 @@
 # vars file for fdb
 fdb_name: fdb_{{ fdb_ver }}
 fdb_tgz: '{{ fdb_name }}.tar.gz'
+fdb_tmp_tgz: /tmp/{{ fdb_tgz }}
 fdb_tgz_url: '{{ fdb_mirror }}/{{ fdb_ver }}/linux/{{ fdb_tgz }}'
 fdb_checksum: '{{ fdb_checksums[fdb_ver] }}'
 

@@ -1,10 +1,13 @@
 ---
-- hosts: all
+- name: Testing andrewrothstein.fdk
+  hosts: all
   roles:
-  - role: '{{ playbook_dir }}'
+    - role: '{{ playbook_dir }}'
   tasks:
-  - command: fdbserver --version
-    register: fdb_test_output
-  - name: fdbserver --version
-    debug:
-      msg: '{{ fdb_test_output.stdout }}'
+    - name: Executing 'fdbserver --version'
+      ansible.builtin.command: fdbserver --version
+      changed_when: false
+      register: fdb_test_output
+    - name: Output from 'fdbserver --version'
+      ansible.builtin.debug:
+        msg: '{{ fdb_test_output.stdout }}'
